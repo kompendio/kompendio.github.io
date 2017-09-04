@@ -72,7 +72,7 @@ var svg = d3.select("#figure").append("svg")
     d["Draw"] = +d[3]*100/d.N;
     d["Away Win"] = +d[4]*100/d.N;
     d["Strongly agree"] = +d[5]*100/d.N;
-    var x0 = -1*(d["Draw"]/2+d["Disagree"]+d["Strongly disagree"]);
+    var x0 = -1*(d["Draw"]/2+d["Home Win"]+d["Strongly disagree"]);
     var idx = 0;
     d.boxes = color.domain().map(function(name) { return {name: name, x0: x0, x1: x0 += +d[name], N: +d.N, n: +d[idx += 1]}; });
   });
