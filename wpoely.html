@@ -60,7 +60,7 @@ var svg = d3.select("#figure").append("svg")
 
   color.domain(["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]);
 
-  d3.csv("raw_data.csv", function(error, data) {
+  d3.csv("wpoely_raw_data.csv", function(error, data) {
 
   data.forEach(function(d) {
     // calc percentages
