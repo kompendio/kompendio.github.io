@@ -6,7 +6,11 @@
 <style>
 
 body {
-  font: 10px sans-serif;
+  font: 11px Roboto, sans-serif;
+}
+
+img {
+height: 25px;
 }
 
 .axis path,
@@ -14,6 +18,29 @@ body {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+</style>
+
+<style>
+
+
+div.relative2 {
+    position: absolute;
+    left: 77px;
+    top: 67px;
+    border: 0px solid #73AD21;
+    line-height: 3.3;
+
+}
+
+div.relative3 {
+    position: absolute;
+    left: 855px;
+    top: 67px;
+    border: 0px solid #73AD21;
+    line-height: 3.3;
+
 }
 
 </style>
@@ -27,14 +54,10 @@ body {
 <div id="figure" style="margin-bottom: 50px;"></div>
 
 
-
-
-
-
 <script>
 
 var margin = {top: 50, right: 20, bottom: 10, left: 65},
-    width = 800 - margin.left - margin.right,
+    width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var y = d3.scale.ordinal()
@@ -45,6 +68,7 @@ var x = d3.scale.linear()
 
 var color = d3.scale.ordinal()
     .range(["#086fad", "#ffcc00", "#c7001e"]);
+
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -61,16 +85,16 @@ var svg = d3.select("#figure").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  color.domain(["Home Win", "Draw", "Away Win"]);
+  color.domain(["Home Win %", "Draw %", "Away Win %"]);
 
   d3.csv("wpoely_raw_data5.csv", function(error, data) {
 
   data.forEach(function(d) {
     // calc percentages
-    d["Home Win"] = +d[1]*100/d.N;
-    d["Draw"] = +d[2]*100/d.N;
-    d["Away Win"] = +d[3]*100/d.N;
-    var x0 = 2;
+    d["Home Win %"] = +d[1]*100/d.N;
+    d["Draw %"] = +d[2]*100/d.N;
+    d["Away Win %"] = +d[3]*100/d.N;
+    var x0 = 5;
     var idx = 0;
     d.boxes = color.domain().map(function(name) { return {name: name, x0: x0, x1: x0 += +d[name], N: +d.N, n: +d[idx += 1]}; });
   });
@@ -106,6 +130,7 @@ var svg = d3.select("#figure").append("svg")
       .attr("height", y.rangeBand())
       .attr("x", function(d) { return x(d.x0); })
       .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+      .attr("fill-opacity", "0.5")      
       .style("fill", function(d) { return color(d.name); });
 
   bars.append("text")
@@ -136,7 +161,7 @@ var svg = d3.select("#figure").append("svg")
 
   var startp = svg.append("g").attr("class", "legendbox").attr("id", "mylegendbox");
   // this is not nice, we should calculate the bounding box and use that
-  var legend_tabs = [-200, -120, -80];
+  var legend_tabs = [-250, -160, -90];
   var legend = startp.selectAll(".legend")
       .data(color.domain().slice())
     .enter().append("g")
@@ -147,6 +172,7 @@ var svg = d3.select("#figure").append("svg")
       .attr("x", 0)
       .attr("width", 18)
       .attr("height", 18)
+      .attr("fill-opacity", "0.5")           
       .style("fill", color);
 
   legend.append("text")
@@ -173,6 +199,99 @@ var svg = d3.select("#figure").append("svg")
 
 });
 </script>
+
+<div class="relative2">
+<table>
+<tr>
+<td>
+<img src="l1-bor.png" alt="FC Girondins Bordeaux"/>
+</td>
+<tr>
+<td>
+<img src="l1-gui.png" alt="hi">
+</td>
+<tr>
+<td>
+<img src="l1-tou.png">
+</td>
+<tr>
+<td>
+<img src="l1-ami.png">
+</td>
+<tr>
+<td>
+<img src="l1-cae.png">
+</td>
+<tr>
+<td>
+<img src="l1-nan.png">
+</td>
+<tr>
+<td>
+<img src="l1-ang.png">
+</td>
+<tr>
+<td>
+<img src="l1-dij.png">
+</td>
+<tr>
+<td>
+<img src="l1-psg.png">
+</td>
+<tr>
+<td>
+<img src="l1-mon.png">
+</td>
+<tr>
+</table>
+</div>
+
+<div class="relative3">
+<table>
+<tr>
+<td>
+<img src="l1-tro.png">
+</td>
+<tr>
+<td>
+<img src="l1-str.png">
+</td>
+<tr>
+<td>
+<img src="l1-ren.png">
+</td>
+<tr>
+<td>
+<img src="l1-nic.png">
+</td>
+<tr>
+<td>
+<img src="l1-mtz.png">
+</td>
+<tr>
+<td>
+<img src="l1-lyo.png">
+</td>
+<tr>
+<td>
+<img src="l1-lil.png">
+</td>
+<tr>
+<td>
+<img src="l1-mpl.png">
+</td>
+<tr>
+<td>
+<img src="l1-ste.png">
+</td>
+<tr>
+<td>
+<img src="l1-mar.png">
+</td>
+<tr>
+</table>
+</div>
+
 
 </body>
 </html>
