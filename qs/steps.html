@@ -30,7 +30,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.steps); });
 
-d3.tsv("data_linechart2.tsv", type, function(error, data) {
+d3.tsv("data_linechart.tsv", type, function(error, data) {
   if (error) throw error;
 
   var metrics = data.columns.slice(1).map(function(id) {
