@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<style>
+
+div {
+    position: absolute;
+    left: 20px;
+    top: 0px;
+}
+
+h2 {
+    display: block;
+    font-size: 1.5em;
+
+    font-family: "Roboto";
+
+}
+
+h4 {
+    display: block;
+    font-size: .8em;
+    margin-top: -1.5em;
+    font-family: "Roboto";
+
+}
+
+body {
+  background: #fcfcfa;
+}
+
+.stroke {
+  fill: none;
+  stroke: #999;
+  stroke-width: 12px;
+}
+
+.fill {
+  fill: #a6cee3;
+  opacity: .75;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .25;
+}
+
+.land {
+  fill: #b2df8a;
+stroke-width: .25px;
+stroke: #1f78b4;
+ opacity: 1;
+}
+
+.boundary {
+  fill: none;
+  stroke: #999;
+  stroke-width: .5px;
+}
+
+.points circle {
+  fill: #fff;
+  stroke: red;
+  stroke-width: 1px;
+}
+
+.points2 circle {
+  fill: #fff;
+  stroke: blue;
+  stroke-width: 2px;
+}
+
+
+.points3 circle {
+  fill: #fff;
+  stroke: green;
+  stroke-width: 2px;
+}
+.points text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+
+.points2 text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+.points3 text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+.route {
+  stroke-dasharray:2,2;
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+  stroke-opacity: 1;
+}
+
+.route3 {
+  stroke-dasharray:1,5;
+  fill: none;
+  stroke: green;
+  stroke-width: 3px;
+  stroke-opacity: 0;
+}
+
+.route2 {
+  stroke-dasharray:1,5;
+  fill: none;
+  stroke: blue;
+  stroke-width: 3px;
+  stroke-opacity: 1;  
+}
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var width = 1160,
+    height = 670;
+
+var places3 = {
+  SFO: [-122 - 23 / 60 - 23.9172 / 3600, 37 + 36 / 60 + 54.8028 / 3600],
+  FRK: [8 + 40 / 60 + 55.6572 / 3600, 50 + 6 / 60 + 39.3264 / 3600],
+  ZAG: [15 + 57 / 60 + 59.6448 / 3600, 45 + 48 / 60 + 55.4364 / 3600],    
+  MUN: [11 + 34 / 60 + 34.0464 / 3600, 48 + 8 / 60 + 13.7544 / 3600],
+  YVR: [-123 - 6 / 60 - 58.4136 / 3600, 49 + 14 / 60 + 46.6512 / 3600],
+  SFO: [-122 - 23 / 60 - 23.9172 / 3600, 37 + 36 / 60 + 54.8028 / 3600]
+};
+
+
+var places2 = {
+  SFO: [-122 - 23 / 60 - 23.9172 / 3600, 37 + 36 / 60 + 54.8028 / 3600],
+  PAR: [2 + 20 / 60 + 56.4504 / 3600, 48 + 51 / 60 + 52.9776 / 3600],
+  MAR: [5 + 22 / 60 + 51 / 3600, 43 + 17 / 60 + 49 / 3600],
+  NYC: [-73 - 56 / 60 - 6.8712 / 3600, 40 + 43 / 60 + 50.1960 / 3600],
+  SFO: [-122 - 23 / 60 - 23.9172 / 3600, 37 + 36 / 60 + 54.8028 / 3600]
+};
+
+
+
+var places = {
+  BOS: [-71 + 3 / 60 + 25.4988 / 3600, 42 + 21 / 60 + 40.1220 / 3600],
+  FRK: [8 + 40 / 60 + 55.6572 / 3600, 50 + 6 / 60 + 39.3264 / 3600],
+  JHB: [28 + 2 / 60 + 2.7168 / 3600, -26 + 11 / 60 + 42.8856 / 3600],
+  BEI: [34 + 50/ 60 + 20 / 3600, -19 + 50 / 60 + 37 / 3600]
+};
+
+var places_all = {
+  HKG: [123 + 54 / 60 + 53 / 3600, 22 + 18 / 60 + 32 / 3600],
+  SVO: [17 + 24 / 60 + 53 / 3600, 55 + 58 / 60 + 22 / 3600],
+  HAV: [-62 - 24 / 60 - 33 / 3600, 22 + 59 / 60 + 21 / 3600],
+  CCS: [-86 - 59 / 60 - 26 / 3600, 10 + 36 / 60 + 11 / 3600],
+  UIO: [-58 - 21 / 60 - 31 / 3600, 0 + 06 / 60 + 48 / 3600],
+  SFO: [-122 - 23 / 60 - 23.9172 / 3600, 37 + 36 / 60 + 54.8028 / 3600],
+  FRK: [8 + 40 / 60 + 55.6572 / 3600, 50 + 6 / 60 + 39.3264 / 3600],
+  GEG: [-117 - 25 / 60 - 33.7728 / 3600, 47 + 39 / 60 + 31.6044 / 3600],
+  BOS: [-71 + 3 / 60 + 25.4988 / 3600, 42 + 21 / 60 + 40.1220 / 3600],
+  JHB: [28 + 2 / 60 + 2.7168 / 3600, -26 + 11 / 60 + 42.8856 / 3600],
+  BEI: [34 + 50/ 60 + 20 / 3600, -19 + 50 / 60 + 37 / 3600],
+  PAR: [2 + 20 / 60 + 56.4504 / 3600, 48 + 51 / 60 + 52.9776 / 3600],
+  LON: [0 + 7 / 60 + 5.1312 / 3600, 51 + 30 / 60 + 35.5140 / 3600],
+  CPT: [18 + 25 / 60 + 23.88 / 3600, -33 + 55 / 60 + 7.8996 / 3600],
+  RYK: [-21 + 49 / 60 + 39.9864 / 3600, 64 + 7 / 60 + 41.8368 / 3600],
+  AMS: [4 + 53 / 60 + 42.6048 / 3600, 52 + 22 / 60 + 12.7776 / 3600],
+  ZAG: [15 + 57 / 60 + 59.6448 / 3600, 45 + 48 / 60 + 55.4364 / 3600],    
+  MUN: [11 + 34 / 60 + 34.0464 / 3600, 48 + 8 / 60 + 13.7544 / 3600],
+  YVR: [-123 - 6 / 60 - 58.4136 / 3600, 49 + 14 / 60 + 46.6512 / 3600],
+  NYC: [-73 - 56 / 60 - 6.8712 / 3600, 40 + 43 / 60 + 50.1960 / 3600],
+  CHI: [-87 - 37 / 60 - 23.4372 / 3600, 41 + 52 / 60 + 54.5952 / 3600],
+  MAR: [5 + 22 / 60 + 51 / 3600, 43 + 17 / 60 + 49 / 3600],
+  CPH: [12 + 34 / 60 + 6.0132 / 3600, 55 + 40 / 60 + 33.9528 / 3600]  
+};
+
+var route = {
+  type: "LineString",
+  coordinates: [
+    places.BOS,
+    places.FRK,
+    places.JHB,
+    places.BEI
+  ]
+};
+
+
+
+var projection = d3.geo.mercator()
+    .scale(100)
+    .rotate([0,0])
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("defs").append("path")
+    .datum({type: "Sphere"})
+    .attr("id", "sphere")
+    .attr("d", path);
+
+svg.append("use")
+    .attr("class", "stroke")
+    .attr("xlink:href", "#sphere");
+
+svg.append("use")
+    .attr("class", "fill")
+    .attr("xlink:href", "#sphere");
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+svg.append("path")
+    .datum(route)
+    .attr("class", "route")
+    .attr("d", path);
+
+
+var point = svg.append("g")
+    .attr("class", "points")
+  .selectAll("g")
+    .data(d3.entries(places))
+  .enter().append("g")
+    .attr("transform", function(d) { return "translate(" + projection(d.value) + ")"; });
+
+point.append("circle")
+    .attr("r", 4.5);
+
+
+point.append("text")
+    .attr("y", 10)
+    .attr("dy", ".71em")
+    .text(function(d) { return d.key; });
+
+d3.json("world-50m.json", function(error, world) {
+  if (error) throw error;
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+});
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
+
+<html>
+<div>
+<h2>Mercator</h2>
+<h4>Scale: 100</h4>
+</html>
+</html>
